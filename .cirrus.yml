@@ -12,7 +12,7 @@ makeenv_task:
       PYTHON: 3.9
   environment_cache:
     folder: conda-env
-    fingerprint_script: 
+    fingerprint_script:
       - echo $PYTHON
       - cat setup.py
     populate_script:
@@ -22,7 +22,7 @@ makeenv_task:
   activate_script: source activate $PWD/conda-env
 
 Unittest_task:
-  depends_on: 
+  depends_on:
     - makeenv
   env:
     matrix:
@@ -33,19 +33,18 @@ Unittest_task:
     CODECOV_TOKEN: eb5758aa-6d0c-4981-a22a-16c663e2aaa9
   environment_cache:
     folder: conda-env
-    fingerprint_script: 
+    fingerprint_script:
       - echo $PYTHON
       - cat setup.py
     populate_script:
       - source activate $PWD/conda-env
   Running_unit_tests_script:
-    - apt-get install -y make curl
     - source activate $PWD/conda-env
     - make unittest
     - bash <(curl -s https://codecov.io/bash)
 
 Integration_task:
-  depends_on: 
+  depends_on:
     - makeenv
   env:
     matrix:
@@ -56,7 +55,7 @@ Integration_task:
     CODECOV_TOKEN: eb5758aa-6d0c-4981-a22a-16c663e2aaa9
   environment_cache:
     folder: conda-env
-    fingerprint_script: 
+    fingerprint_script:
       - echo $PYTHON
       - cat setup.py
     populate_script:
