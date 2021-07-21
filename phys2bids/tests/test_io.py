@@ -1,4 +1,4 @@
-from phys2bids import io
+from phys2bids import io, physio_obj
 
 import math
 
@@ -158,3 +158,34 @@ def test_load_mat(matlab_file_labchart, matlab_file_acq):
     assert phys_obj.ch_name[chtrig] == 'MR TRIGGER - Custom, HLT100C - A 5'
     assert phys_obj.freq[chtrig] == 10000.0
     assert phys_obj.units[chtrig] == 'Volts'
+
+
+def test_load_smr(spike2_smr_file, spike2_smrx_file):
+    chtrig = 5
+
+    # 32-bit file
+    phys_obj = io.load_smr(spike2_smr_file, chtrig)
+    assert phys_obj.ch_name[0] == 'time'
+    assert phys_obj.freq[0] == 1000.0
+    assert phys_obj.units[0] == 's'
+    for n, ts in zip(phys_obj.ch_name, phys_obj.timeseries):
+        print(n, len(ts))
+
+    # checks that the scanner strigger is in the right channel
+    # the marker channels are stored as binary
+    assert phys_obj.ch_name[chtrig] == 'Scan Vol'
+    assert phys_obj.freq[chtrig] == 200.0
+    assert phys_obj.units[chtrig] == ''
+    assert len(phys_obj.timeseries[chtrig]) == 60
+
+    # 64-bit file should have the same
+    phys_obj = io.load_smr(spike2_smrx_file, chtrig)
+    assert phys_obj.ch_name[0] == 'time'
+    assert phys_obj.freq[0] == 1000.0
+    assert phys_obj.units[0] == 's'
+    # checks that the scanner trigger is in the right channel
+    # the marker channels are stored as binary
+    assert phys_obj.ch_name[chtrig] == 'Scan Vol'
+    assert phys_obj.freq[chtrig] == 200.0
+    assert phys_obj.units[chtrig] == ''
+    assert len(phys_obj.timeseries[chtrig]) == 60

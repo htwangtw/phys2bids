@@ -106,3 +106,15 @@ def matlab_file_labchart(testpath):
 def matlab_file_acq(testpath):
     return fetch_file('mc96w', testpath,
                       'Test_belt_pulse_multifreq.mat')
+
+
+@pytest.fixture
+def spike2_smrx_file(testpath):
+    return fetch_file('7x5qw', testpath,
+                      'Test_ppg_pulse_spike2.smrx')
+
+
+@pytest.fixture
+def spike2_smr_file(testpath):
+    return fetch_file('zdpfr', testpath,
+                      'Test_ppg_pulse_spike2.smr')
